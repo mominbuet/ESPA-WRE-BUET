@@ -9,11 +9,14 @@ using System.Windows.Forms;
 using System.IO;
 using System.Data.OleDb;
 using Graph = System.Windows.Forms.DataVisualization.Charting;
+using System.Windows.Forms.DataVisualization.Charting;
+using ExcelLibrary.Office.Excel;
 namespace ESPA
 {
 
     public partial class Form1 : Form
     {
+        Dictionary<double, double> lineChartData = new Dictionary<double, double>();
         Graph.Chart chart;
         public Form1()
         {
@@ -118,7 +121,7 @@ namespace ESPA
                     areaCls row = allData.Where(x => x.UNINAME == cmbUnion.SelectedItem.ToString()).FirstOrDefault();
                     if (row != null)
                     {
-                        Dictionary<double, double> lineChartData = new Dictionary<double, double>();
+                        lineChartData = new Dictionary<double, double>();
                         try
                         {
                             List<DateTime> allDates = new List<DateTime>();
@@ -252,12 +255,12 @@ namespace ESPA
                             foreach (var key in list)
                             {
                                 chart.Series["MyFunc"].Points.AddXY(key + .46, lineChartData[key] * 100);
-                                chart.Series["MyFunc"].ToolTip = (Math.Round( key + .46,2)).ToString() + "," + (Math.Round(lineChartData[key] * 100,2).ToString());
+                                chart.Series["MyFunc"].ToolTip = (Math.Round(key + .46, 2)).ToString() + "," + (Math.Round(lineChartData[key] * 100, 2).ToString());
                                 chart.Series["MyFunc"].MarkerColor = Color.Green;
                                 chart.Series["MyFunc"].MarkerSize = 5;
                                 chart.Series["MyFunc"].MarkerStyle = Graph.MarkerStyle.Circle;
                             }
-                            chart.Series["MyFunc"].LegendText = cmbUnion.SelectedItem.ToString()+" Inundation Line";
+                            chart.Series["MyFunc"].LegendText = cmbUnion.SelectedItem.ToString() + " Inundation Line";
                             // Create a new legend called "MyLegend".
                             if (chart1.Legends.Count != 0)
                                 chart1.Legends.RemoveAt(0);
@@ -320,8 +323,8 @@ namespace ESPA
             cmbUnionID.Items.Clear();
             IList<areaCls> rows = new List<areaCls>();
             rows = (cmbDist.SelectedItem.ToString() != "All") ? allData.Where(x => x.DISTNAME == cmbDist.SelectedItem.ToString()).
-                GroupBy(x=>x.THANAME).Select(group=>group.First()).ToList() :allData;
-            
+                GroupBy(x => x.THANAME).Select(group => group.First()).ToList() : allData;
+
             foreach (areaCls row in rows)
             {
                 cmbThana.Items.Add(row.THANAME);
@@ -336,7 +339,7 @@ namespace ESPA
             cmbUnionID.Items.Clear();
             IList<areaCls> rows = new List<areaCls>();
             rows = (cmbThana.SelectedItem.ToString() != "") ? allData.Where(x => x.THANAME == cmbThana.SelectedItem.ToString())
-                .GroupBy(x=>x.UNINAME).Select(group=>group.First()).ToList() :
+                .GroupBy(x => x.UNINAME).Select(group => group.First()).ToList() :
                 new List<areaCls>(rows.Concat(allData));
 
             foreach (areaCls row in rows)
@@ -353,12 +356,69 @@ namespace ESPA
                 DialogResult result = folderBrowserDialog1.ShowDialog(); // Show the dialog.
                 if (result == DialogResult.OK) // Test result.
                     savedir = folderBrowserDialog1.SelectedPath;
-                
-            }
-            chart1.SaveImage(savedir+"\\"+cmbUnion.SelectedItem.ToString() + "_" + cmbYear.SelectedItem.ToString() + "_chart.png", Graph.ChartImageFormat.Png);
-                            
-        }
 
+            }
+            //chart1.SaveImage(savedir+"\\"+cmbUnion.SelectedItem.ToString() + "_" + cmbYear.SelectedItem.ToString() + "_chart.png", Graph.ChartImageFormat.Png);
+            string file = savedir + "\\" + cmbUnion.SelectedItem.ToString() + "_" + cmbYear.SelectedItem.ToString() + ".xls";
+            areaCls row = allData.Where(x => x.UNINAME == cmbUnion.SelectedItem.ToString()).FirstOrDefault();
+            Workbook workbook = new Workbook();
+            Worksheet worksheet = new Worksheet("First Sheet");
+            worksheet.Cells[0, 0] = new Cell("Water elevation");
+            worksheet.Cells[0, 1] = new Cell("Polder name");
+            worksheet.Cells[0, 2] = new Cell("Polder height");
+            worksheet.Cells[0, 3] = new Cell("Percent area Inundated");
+            int i = 1;
+            foreach (var key in lineChartData.Keys)
+            {
+                worksheet.Cells[i, 0] = new Cell(key);
+                worksheet.Cells[i, 1] = new Cell(row.Pol_nam);
+                worksheet.Cells[i, 2] = new Cell(row.Pol_height);
+                worksheet.Cells[i, 3] = new Cell(lineChartData[key]);
+                i++;
+            }
+            //worksheet.Cells[2, 0] = new Cell(9999999);
+            //worksheet.Cells[3, 3] = new Cell((decimal)3.45);
+            //worksheet.Cells[2, 2] = new Cell("Text string");
+            //worksheet.Cells[2, 4] = new Cell("Second string");
+            //worksheet.Cells[4, 0] = new Cell(32764.5, "#,##0.00");
+            //worksheet.Cells[5, 1] = new Cell(DateTime.Now, @"YYYY\-MM\-DD");
+            worksheet.Cells.ColumnWidth[0, 1] = 3000;
+            workbook.Worksheets.Add(worksheet);
+            workbook.Save(file);
+
+        }
+        Point? prevPosition = null;
+        ToolTip tooltip = new ToolTip();
+        private void chart1_mousemove(object sender, MouseEventArgs e)
+        {
+            var pos = e.Location;
+            if (prevPosition.HasValue && pos == prevPosition.Value)
+                return;
+            tooltip.RemoveAll();
+            prevPosition = pos;
+            var results = chart1.HitTest(pos.X, pos.Y, false, ChartElementType.DataPoint);
+            foreach (var result in results)
+            {
+                if (result.ChartElementType == ChartElementType.DataPoint)
+                {
+                    var prop = result.Object as DataPoint;
+                    if (prop != null)
+                    {
+                        var pointXPixel = result.ChartArea.AxisX.ValueToPixelPosition(prop.XValue);
+                        var pointYPixel = result.ChartArea.AxisY.ValueToPixelPosition(prop.YValues[0]);
+
+                        // check if the cursor is really close to the point (2 pixels around the point)
+                        if (Math.Abs(pos.X - pointXPixel) < 2 &&
+                            Math.Abs(pos.Y - pointYPixel) < 2)
+                        {
+                            tooltip.Show("X=" + Math.Round(prop.XValue, 3) + ", Y=" + Math.Round(prop.YValues[0], 3), this.chart1,
+                                            pos.X, pos.Y - 15);
+                        }
+                    }
+                }
+            }
+
+        }
 
     }
 }

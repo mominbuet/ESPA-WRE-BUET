@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.btnLoad = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.cmbUnion = new System.Windows.Forms.ComboBox();
@@ -119,11 +119,12 @@
             // 
             this.chart1.Location = new System.Drawing.Point(268, 12);
             this.chart1.Name = "chart1";
-            series4.Name = "Series1";
-            this.chart1.Series.Add(series4);
+            series1.Name = "Series1";
+            this.chart1.Series.Add(series1);
             this.chart1.Size = new System.Drawing.Size(614, 469);
             this.chart1.TabIndex = 8;
             this.chart1.Text = "chart1";
+            this.chart1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.chart1_mousemove);
             // 
             // label4
             // 

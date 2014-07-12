@@ -8,3 +8,14 @@ C:\Users\Gun2sh\Documents\Visual Studio 2010\Projects\ESPA\ESPA\obj\x86\Debug\ES
 C:\Users\Gun2sh\Documents\Visual Studio 2010\Projects\ESPA\ESPA\obj\x86\Debug\ESPA.pdb
 C:\Users\Gun2sh\Documents\Visual Studio 2010\Projects\ESPA\ESPA\obj\x86\Debug\ESPA.Form1.resources
 C:\Users\Gun2sh\Documents\Visual Studio 2010\Projects\ESPA\ESPA\obj\x86\Debug\ESPA.csprojResolveAssemblyReference.cache
+H:\Work\wre RA\Espa WRE c#\ESPA\ESPA\bin\Debug\ESPA.exe.config
+H:\Work\wre RA\Espa WRE c#\ESPA\ESPA\obj\x86\Debug\ESPA.exe
+H:\Work\wre RA\Espa WRE c#\ESPA\ESPA\obj\x86\Debug\ESPA.pdb
+H:\Work\wre RA\Espa WRE c#\ESPA\ESPA\bin\Debug\ESPA.exe
+H:\Work\wre RA\Espa WRE c#\ESPA\ESPA\bin\Debug\ESPA.pdb
+H:\Work\wre RA\Espa WRE c#\ESPA\ESPA\bin\Debug\ExcelLibrary.dll
+H:\Work\wre RA\Espa WRE c#\ESPA\ESPA\bin\Debug\System.Data.SqlServerCe.dll
+H:\Work\wre RA\Espa WRE c#\ESPA\ESPA\obj\x86\Debug\ESPA.csprojResolveAssemblyReference.cache
+H:\Work\wre RA\Espa WRE c#\ESPA\ESPA\obj\x86\Debug\ESPA.Form1.resources
+H:\Work\wre RA\Espa WRE c#\ESPA\ESPA\obj\x86\Debug\ESPA.Properties.Resources.resources
+H:\Work\wre RA\Espa WRE c#\ESPA\ESPA\obj\x86\Debug\ESPA.csproj.GenerateResource.Cache
