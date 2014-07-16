@@ -78,6 +78,7 @@
             this.cmbUnion.Name = "cmbUnion";
             this.cmbUnion.Size = new System.Drawing.Size(121, 21);
             this.cmbUnion.TabIndex = 3;
+            this.cmbUnion.SelectedIndexChanged += new System.EventHandler(this.cmbUnion_changed);
             // 
             // label2
             // 

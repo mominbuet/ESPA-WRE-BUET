@@ -101,7 +101,7 @@ namespace ESPA
             //Console.WriteLine(size); // <-- Shows file size in debugging mode.
             //Console.WriteLine(result); // <-- For debugging use.
         }
-
+        Dictionary<DateTime, double> obs = new Dictionary<DateTime, double>();
         private void btnGraph_Click(object sender, EventArgs e)
         {
             label1.Text = "Computing...";
@@ -170,7 +170,8 @@ namespace ESPA
 
                             string wlPath = mainDir + "\\WL\\" + cmbYear.SelectedItem.ToString() + "\\" + row.obs_point + ".csv";
                             var reader = new StreamReader(File.OpenRead(wlPath));
-                            Dictionary<DateTime, double> obs = new Dictionary<DateTime, double>();
+                            obs = new Dictionary<DateTime, double>();
+                            
                             int i = 0;
                             while (!reader.EndOfStream)
                             {
@@ -332,7 +333,12 @@ namespace ESPA
                 cmbUnionID.Items.Add(Convert.ToInt32(row.UNIONCOD01).ToString());
             }
         }
-
+        private void cmbUnion_changed(object sender, EventArgs e)
+        {
+            //cmbUnionID.SelectedText = "";
+            areaCls row = allData.Where(x => x.UNINAME == cmbUnion.SelectedItem.ToString()).FirstOrDefault();
+            cmbUnionID.SelectedIndex = cmbUnionID.Items.IndexOf(Convert.ToInt32(row.UNIONCOD01).ToString());
+        }
         private void cmbThanaChanged(object sender, EventArgs e)
         {
             cmbUnion.Items.Clear();
@@ -351,41 +357,57 @@ namespace ESPA
 
         private void cmdExport_click(object sender, EventArgs e)
         {
-            if (savedir == "")
+            if (obs.Count > 0)
             {
-                DialogResult result = folderBrowserDialog1.ShowDialog(); // Show the dialog.
-                if (result == DialogResult.OK) // Test result.
-                    savedir = folderBrowserDialog1.SelectedPath;
+                if (savedir == "")
+                {
+                    DialogResult result = folderBrowserDialog1.ShowDialog(); // Show the dialog.
+                    if (result == DialogResult.OK) // Test result.
+                        savedir = folderBrowserDialog1.SelectedPath;
+
+                }
+                //chart1.SaveImage(savedir+"\\"+cmbUnion.SelectedItem.ToString() + "_" + cmbYear.SelectedItem.ToString() + "_chart.png", Graph.ChartImageFormat.Png);
+                string file = savedir + "\\" + cmbUnion.SelectedItem.ToString() + "_" + cmbYear.SelectedItem.ToString() + ".xls";
+                areaCls row = allData.Where(x => x.UNINAME == cmbUnion.SelectedItem.ToString()).FirstOrDefault();
+                Workbook workbook = new Workbook();
+                Worksheet worksheet = new Worksheet("First Sheet");
+                worksheet.Cells[0, 0] = new Cell("Water elevation");
+                worksheet.Cells[0, 1] = new Cell("Polder name");
+                worksheet.Cells[0, 2] = new Cell("Polder elevation");
+                worksheet.Cells[0, 3] = new Cell("Date(d/MM/YYYY)");
+                worksheet.Cells[0, 4] = new Cell("Percent area Inundated");
+                int i = 1;
+                foreach (var key in lineChartData.Keys)
+                {
+                    worksheet.Cells[i, 0] = new Cell(key);
+                    if (i == 1)
+                    {
+                        worksheet.Cells[i, 1] = new Cell(row.Pol_nam);
+                        worksheet.Cells[i, 2] = new Cell(row.Pol_height);
+                    }
+                    foreach (var datekey in obs.Keys)
+                    {
+                        if (obs[datekey] == key)
+                            worksheet.Cells[i, 3] = new Cell(datekey.ToShortDateString());
+                    }
+                    worksheet.Cells[i, 4] = new Cell(lineChartData[key]);
+                    i++;
+                }
+                //worksheet.Cells[2, 0] = new Cell(9999999);
+                //worksheet.Cells[3, 3] = new Cell((decimal)3.45);
+                //worksheet.Cells[2, 2] = new Cell("Text string");
+                //worksheet.Cells[2, 4] = new Cell("Second string");
+                //worksheet.Cells[4, 0] = new Cell(32764.5, "#,##0.00");
+                //worksheet.Cells[5, 1] = new Cell(DateTime.Now, @"YYYY\-MM\-DD");
+                worksheet.Cells.ColumnWidth[0, 1] = 3000;
+                worksheet.Cells.ColumnWidth[0, 2] = 3000;
+                worksheet.Cells.ColumnWidth[0, 3] = 3000;
+                worksheet.Cells.ColumnWidth[0, 4] = 3000;
+                worksheet.Cells.ColumnWidth[0, 5] = 5000;
+                workbook.Worksheets.Add(worksheet);
+                workbook.Save(file);
 
             }
-            //chart1.SaveImage(savedir+"\\"+cmbUnion.SelectedItem.ToString() + "_" + cmbYear.SelectedItem.ToString() + "_chart.png", Graph.ChartImageFormat.Png);
-            string file = savedir + "\\" + cmbUnion.SelectedItem.ToString() + "_" + cmbYear.SelectedItem.ToString() + ".xls";
-            areaCls row = allData.Where(x => x.UNINAME == cmbUnion.SelectedItem.ToString()).FirstOrDefault();
-            Workbook workbook = new Workbook();
-            Worksheet worksheet = new Worksheet("First Sheet");
-            worksheet.Cells[0, 0] = new Cell("Water elevation");
-            worksheet.Cells[0, 1] = new Cell("Polder name");
-            worksheet.Cells[0, 2] = new Cell("Polder height");
-            worksheet.Cells[0, 3] = new Cell("Percent area Inundated");
-            int i = 1;
-            foreach (var key in lineChartData.Keys)
-            {
-                worksheet.Cells[i, 0] = new Cell(key);
-                worksheet.Cells[i, 1] = new Cell(row.Pol_nam);
-                worksheet.Cells[i, 2] = new Cell(row.Pol_height);
-                worksheet.Cells[i, 3] = new Cell(lineChartData[key]);
-                i++;
-            }
-            //worksheet.Cells[2, 0] = new Cell(9999999);
-            //worksheet.Cells[3, 3] = new Cell((decimal)3.45);
-            //worksheet.Cells[2, 2] = new Cell("Text string");
-            //worksheet.Cells[2, 4] = new Cell("Second string");
-            //worksheet.Cells[4, 0] = new Cell(32764.5, "#,##0.00");
-            //worksheet.Cells[5, 1] = new Cell(DateTime.Now, @"YYYY\-MM\-DD");
-            worksheet.Cells.ColumnWidth[0, 1] = 3000;
-            workbook.Worksheets.Add(worksheet);
-            workbook.Save(file);
-
         }
         Point? prevPosition = null;
         ToolTip tooltip = new ToolTip();
@@ -419,6 +441,8 @@ namespace ESPA
             }
 
         }
+
+        
 
     }
 }
