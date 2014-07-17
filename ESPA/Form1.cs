@@ -233,7 +233,7 @@ namespace ESPA
 
                             chart.ChartAreas["draw"].AxisY.Title = "%area inundation";
                             chart.ChartAreas["draw"].AxisY.Minimum = 0;
-                            chart.ChartAreas["draw"].AxisY.Maximum = 100;
+                            chart.ChartAreas["draw"].AxisY.Maximum = 150;
                             chart.ChartAreas["draw"].AxisY.Interval = 10;
                             chart.ChartAreas["draw"].AxisY.MajorGrid.LineColor = Color.Gray;
                             chart.ChartAreas["draw"].AxisY.MajorGrid.LineDashStyle = Graph.ChartDashStyle.Dash;
@@ -252,11 +252,15 @@ namespace ESPA
                             //{
                             //    chart.Series["MyFunc"].Points.AddXY(x, Math.Sin(x) / x);
                             //}
-
+                            Tuple<double, double> getAB = new best_fit().getAB(lineChartData);
                             foreach (var key in list)
                             {
-                                chart.Series["MyFunc"].Points.AddXY(key + .46, lineChartData[key] * 100);
-                                chart.Series["MyFunc"].ToolTip = (Math.Round(key + .46, 2)).ToString() + "," + (Math.Round(lineChartData[key] * 100, 2).ToString());
+
+                                //chart.Series["MyFunc"].Points.AddXY(key + .46, lineChartData[key] * 100);
+
+                                chart.Series["MyFunc"].Points.AddXY(key + .46,( getAB.Item1+getAB.Item2*key) * 100);
+
+                                //chart.Series["MyFunc"].ToolTip = (Math.Round(key + .46, 2)).ToString() + "," + (Math.Round(lineChartData[key] * 100, 2).ToString());
                                 chart.Series["MyFunc"].MarkerColor = Color.Green;
                                 chart.Series["MyFunc"].MarkerSize = 5;
                                 chart.Series["MyFunc"].MarkerStyle = Graph.MarkerStyle.Circle;
@@ -366,6 +370,7 @@ namespace ESPA
                         savedir = folderBrowserDialog1.SelectedPath;
 
                 }
+                Tuple<double, double> getAB = new best_fit().getAB(lineChartData);
                 //chart1.SaveImage(savedir+"\\"+cmbUnion.SelectedItem.ToString() + "_" + cmbYear.SelectedItem.ToString() + "_chart.png", Graph.ChartImageFormat.Png);
                 string file = savedir + "\\" + cmbUnion.SelectedItem.ToString() + "_" + cmbYear.SelectedItem.ToString() + ".xls";
                 areaCls row = allData.Where(x => x.UNINAME == cmbUnion.SelectedItem.ToString()).FirstOrDefault();
@@ -376,6 +381,7 @@ namespace ESPA
                 worksheet.Cells[0, 2] = new Cell("Polder elevation");
                 worksheet.Cells[0, 3] = new Cell("Date(d/MM/YYYY)");
                 worksheet.Cells[0, 4] = new Cell("Percent area Inundated");
+                worksheet.Cells[0, 5] = new Cell("f value");
                 int i = 1;
                 foreach (var key in lineChartData.Keys)
                 {
@@ -391,6 +397,7 @@ namespace ESPA
                             worksheet.Cells[i, 3] = new Cell(datekey.ToShortDateString());
                     }
                     worksheet.Cells[i, 4] = new Cell(lineChartData[key]);
+                    worksheet.Cells[i, 5] = new Cell(getAB.Item1 + getAB.Item2 * key);
                     i++;
                 }
                 //worksheet.Cells[2, 0] = new Cell(9999999);
@@ -399,10 +406,11 @@ namespace ESPA
                 //worksheet.Cells[2, 4] = new Cell("Second string");
                 //worksheet.Cells[4, 0] = new Cell(32764.5, "#,##0.00");
                 //worksheet.Cells[5, 1] = new Cell(DateTime.Now, @"YYYY\-MM\-DD");
-                worksheet.Cells.ColumnWidth[0, 1] = 3000;
-                worksheet.Cells.ColumnWidth[0, 2] = 3000;
-                worksheet.Cells.ColumnWidth[0, 3] = 3000;
-                worksheet.Cells.ColumnWidth[0, 4] = 3000;
+                worksheet.Cells.ColumnWidth[0, 0] = 5000; 
+                worksheet.Cells.ColumnWidth[0, 1] = 5000;
+                worksheet.Cells.ColumnWidth[0, 2] = 5000;
+                worksheet.Cells.ColumnWidth[0, 3] = 5000;
+                worksheet.Cells.ColumnWidth[0, 4] = 5000;
                 worksheet.Cells.ColumnWidth[0, 5] = 5000;
                 workbook.Worksheets.Add(worksheet);
                 workbook.Save(file);
