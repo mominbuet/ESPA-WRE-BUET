@@ -233,7 +233,7 @@ namespace ESPA
 
                             chart.ChartAreas["draw"].AxisY.Title = "%area inundation";
                             chart.ChartAreas["draw"].AxisY.Minimum = 0;
-                            chart.ChartAreas["draw"].AxisY.Maximum = 150;
+                            chart.ChartAreas["draw"].AxisY.Maximum = 100;
                             chart.ChartAreas["draw"].AxisY.Interval = 10;
                             chart.ChartAreas["draw"].AxisY.MajorGrid.LineColor = Color.Gray;
                             chart.ChartAreas["draw"].AxisY.MajorGrid.LineDashStyle = Graph.ChartDashStyle.Dash;
@@ -342,6 +342,12 @@ namespace ESPA
             //cmbUnionID.SelectedText = "";
             areaCls row = allData.Where(x => x.UNINAME == cmbUnion.SelectedItem.ToString()).FirstOrDefault();
             cmbUnionID.SelectedIndex = cmbUnionID.Items.IndexOf(Convert.ToInt32(row.UNIONCOD01).ToString());
+        }
+        private void cmbUnionID_changed(object sender, EventArgs e)
+        {
+            //cmbUnionID.SelectedText = "";
+            areaCls row = allData.Where(x => x.UNIONCOD01 ==Convert.ToInt32(cmbUnionID.SelectedItem)).FirstOrDefault();
+            cmbUnion.SelectedIndex = cmbUnion.Items.IndexOf(row.UNINAME);
         }
         private void cmbThanaChanged(object sender, EventArgs e)
         {

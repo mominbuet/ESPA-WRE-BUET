@@ -36,7 +36,7 @@ namespace ESPA
             double xSquareSum =getSquareSum(Xkeys);
             double XYSum = getSumXY(values);
             double A = ((xSum * XYSum) - (xSquareSum * ySum)) / (xSum * xSum - values.Count * xSquareSum);
-            double B = (1 / xSum) * (ySum - ((values.Count * xSum * XYSum - xSquareSum * ySum) / (xSum * xSum - values.Count*xSquareSum)));
+            double B = (1 / xSum) * (ySum - ((values.Count *( xSum * XYSum - xSquareSum * ySum)) / (xSum * xSum - values.Count*xSquareSum)));
             res = new Tuple<double, double>(A, B);
             return res;
         }

@@ -105,6 +105,7 @@
             this.cmbUnionID.Name = "cmbUnionID";
             this.cmbUnionID.Size = new System.Drawing.Size(121, 21);
             this.cmbUnionID.TabIndex = 6;
+            this.cmbUnionID.SelectedIndexChanged += new System.EventHandler(this.cmbUnionID_changed);
             // 
             // button1
             // 
