@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.btnLoad = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.cmbUnion = new System.Windows.Forms.ComboBox();
@@ -48,6 +48,7 @@
             this.label7 = new System.Windows.Forms.Label();
             this.cmbDist = new System.Windows.Forms.ComboBox();
             this.cmdExport = new System.Windows.Forms.Button();
+            this.lblEquation = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -121,8 +122,8 @@
             // 
             this.chart1.Location = new System.Drawing.Point(268, 12);
             this.chart1.Name = "chart1";
-            series1.Name = "Series1";
-            this.chart1.Series.Add(series1);
+            series2.Name = "Series1";
+            this.chart1.Series.Add(series2);
             this.chart1.Size = new System.Drawing.Size(614, 469);
             this.chart1.TabIndex = 8;
             this.chart1.Text = "chart1";
@@ -215,12 +216,22 @@
             this.cmdExport.UseVisualStyleBackColor = true;
             this.cmdExport.Click += new System.EventHandler(this.cmdExport_click);
             // 
+            // lblEquation
+            // 
+            this.lblEquation.AutoSize = true;
+            this.lblEquation.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblEquation.Location = new System.Drawing.Point(11, 503);
+            this.lblEquation.Name = "lblEquation";
+            this.lblEquation.Size = new System.Drawing.Size(0, 20);
+            this.lblEquation.TabIndex = 19;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlDark;
             this.ClientSize = new System.Drawing.Size(891, 535);
+            this.Controls.Add(this.lblEquation);
             this.Controls.Add(this.cmdExport);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.cmbDist);
@@ -268,6 +279,7 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.ComboBox cmbDist;
         private System.Windows.Forms.Button cmdExport;
+        private System.Windows.Forms.Label lblEquation;
     }
 }
 

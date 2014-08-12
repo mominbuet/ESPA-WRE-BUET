@@ -247,23 +247,31 @@ namespace ESPA
                             // Color the line of the graph light green and give it a thickness of 3
                             chart.Series["MyFunc"].Color = Color.Red;
                             chart.Series["MyFunc"].BorderWidth = 5;
+                            chart.Series.Add("MyOriginalFunc");
+                            // Set the type to line
+                            chart.Series["MyOriginalFunc"].ChartType = Graph.SeriesChartType.Point;
                             //This function cannot include zero, and we walk through it in steps of 0.1 to add coordinates to our series
                             //for (double x = 0.1; x < MaxX; x += 0.1)
                             //{
                             //    chart.Series["MyFunc"].Points.AddXY(x, Math.Sin(x) / x);
                             //}
                             Tuple<double, double> getAB = new best_fit().getAB(lineChartData);
+                            lblEquation.Text= "f = "+getAB.Item1+" + "+getAB.Item2+"x.";
                             foreach (var key in list)
                             {
-
                                 //chart.Series["MyFunc"].Points.AddXY(key + .46, lineChartData[key] * 100);
-
                                 chart.Series["MyFunc"].Points.AddXY(key + .46,( getAB.Item1+getAB.Item2*key) * 100);
-
                                 //chart.Series["MyFunc"].ToolTip = (Math.Round(key + .46, 2)).ToString() + "," + (Math.Round(lineChartData[key] * 100, 2).ToString());
                                 chart.Series["MyFunc"].MarkerColor = Color.Green;
                                 chart.Series["MyFunc"].MarkerSize = 5;
                                 chart.Series["MyFunc"].MarkerStyle = Graph.MarkerStyle.Circle;
+
+                                chart.Series["MyOriginalFunc"].Points.AddXY(key + .46, lineChartData[key] * 100);
+
+                                //chart.Series["MyFunc"].ToolTip = (Math.Round(key + .46, 2)).ToString() + "," + (Math.Round(lineChartData[key] * 100, 2).ToString());
+                                chart.Series["MyOriginalFunc"].MarkerColor = Color.Orange;
+                                chart.Series["MyOriginalFunc"].MarkerSize = 10;
+                                chart.Series["MyOriginalFunc"].MarkerStyle = Graph.MarkerStyle.Diamond;
                             }
                             chart.Series["MyFunc"].LegendText = cmbUnion.SelectedItem.ToString() + " Inundation Line";
                             // Create a new legend called "MyLegend".
@@ -272,7 +280,9 @@ namespace ESPA
                             chart.Legends.Add("MyLegend");
                             chart.Legends["MyLegend"].BorderColor = Color.Tomato; // I like tomato juice!
                             label1.Text = "";
+                            chart.Series["MyOriginalFunc"].LegendText = "Original points";
                             cmdExport.Visible = true;
+                            
                         }
                         else
                         {
@@ -300,11 +310,6 @@ namespace ESPA
                             chart.Series.Add("MyFunc");
                             // Set the type to line
                             chart.Series["MyFunc"].ChartType = Graph.SeriesChartType.Line;
-                            // Color the line of the graph light green and give it a thickness of 3
-                            /*chart.Series["MyFunc"].Color = Color.Red;
-                            chart.Series["MyFunc"].BorderWidth = 5;
-                            chart.Series["MyFunc"].LegendText = "No Inundation Line";*/
-                            // Create a new legend called "MyLegend".
                             chart.Series["MyFunc"].LegendText = cmbUnion.SelectedItem.ToString() + " Inundation Line";
                             if (chart1.Legends.Count != 0)
                                 chart1.Legends.RemoveAt(0);
@@ -406,6 +411,7 @@ namespace ESPA
                     worksheet.Cells[i, 5] = new Cell(getAB.Item1 + getAB.Item2 * key);
                     i++;
                 }
+                worksheet.Cells[i+1, 0] = new Cell("Equation: " +lblEquation.Text);
                 //worksheet.Cells[2, 0] = new Cell(9999999);
                 //worksheet.Cells[3, 3] = new Cell((decimal)3.45);
                 //worksheet.Cells[2, 2] = new Cell("Text string");
@@ -446,7 +452,9 @@ namespace ESPA
                         // check if the cursor is really close to the point (2 pixels around the point)
                         if (Math.Abs(pos.X - pointXPixel) < 2 &&
                             Math.Abs(pos.Y - pointYPixel) < 2)
+                            
                         {
+
                             tooltip.Show("X=" + Math.Round(prop.XValue, 3) + ", Y=" + Math.Round(prop.YValues[0], 3), this.chart1,
                                             pos.X, pos.Y - 15);
                         }
