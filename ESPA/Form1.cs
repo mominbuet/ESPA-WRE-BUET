@@ -239,8 +239,13 @@ namespace ESPA
                             chart.ChartAreas["draw"].AxisY.MajorGrid.LineDashStyle = Graph.ChartDashStyle.Dash;
                             //chart.ChartAreas["draw"].BackColor = Color.Black;
                             // Create a new function series
-                            if (chart1.Series.Count != 0)
+                            if (chart.Series[0].Name != "MyFunc")
+                            {
+                                
                                 chart1.Series.RemoveAt(0);
+                            }
+                            if (chart1.Series.FirstOrDefault(x => x.Name == "MyFunc") != null) chart1.Series.Remove(chart.Series["MyFunc"]);
+                            if (chart1.Series.FirstOrDefault(x => x.Name == "MyOriginalFunc") != null) chart1.Series.Remove(chart.Series["MyOriginalFunc"]);
                             chart.Series.Add("MyFunc");
                             // Set the type to line
                             chart.Series["MyFunc"].ChartType = Graph.SeriesChartType.Line;
@@ -305,8 +310,12 @@ namespace ESPA
                             chart.ChartAreas["draw"].AxisY.MajorGrid.LineDashStyle = Graph.ChartDashStyle.Dash;
                             //chart.ChartAreas["draw"].BackColor = Color.Black;
                             // Create a new function series
-                            if (chart1.Series.Count != 0)
+                            if (chart.Series[0].Name != "MyFunc")
+                            {
                                 chart1.Series.RemoveAt(0);
+                            }
+                            if (chart1.Series.FirstOrDefault(x => x.Name == "MyFunc") != null) chart1.Series.Remove(chart.Series["MyFunc"]);
+                            if (chart1.Series.FirstOrDefault(x => x.Name == "MyOriginalFunc") != null) chart1.Series.Remove(chart.Series["MyOriginalFunc"]);
                             chart.Series.Add("MyFunc");
                             // Set the type to line
                             chart.Series["MyFunc"].ChartType = Graph.SeriesChartType.Line;
@@ -407,7 +416,7 @@ namespace ESPA
                         if (obs[datekey] == key)
                             worksheet.Cells[i, 3] = new Cell(datekey.ToShortDateString());
                     }
-                    worksheet.Cells[i, 4] = new Cell(lineChartData[key]);
+                    worksheet.Cells[i, 4] = new Cell(lineChartData[key]*100);
                     worksheet.Cells[i, 5] = new Cell(getAB.Item1 + getAB.Item2 * key);
                     i++;
                 }
