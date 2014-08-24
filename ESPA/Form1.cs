@@ -408,8 +408,8 @@ namespace ESPA
                     worksheet.Cells[i, 0] = new Cell(key);
                     if (i == 1)
                     {
-                        worksheet.Cells[i, 1] = new Cell(row.Pol_nam);
-                        worksheet.Cells[i, 2] = new Cell(row.Pol_height);
+                        worksheet.Cells[i, 1] = new Cell(row.Pol_nam.ToString());
+                        worksheet.Cells[i, 2] = new Cell(row.Pol_height.ToString());
                     }
                     foreach (var datekey in obs.Keys)
                     {
