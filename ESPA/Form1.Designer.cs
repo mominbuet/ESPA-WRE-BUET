@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.btnLoad = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.cmbUnion = new System.Windows.Forms.ComboBox();
@@ -39,8 +39,6 @@
             this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.label4 = new System.Windows.Forms.Label();
             this.cmbYear = new System.Windows.Forms.ComboBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.txtScenario = new System.Windows.Forms.TextBox();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.lblerr = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
@@ -122,8 +120,8 @@
             // 
             this.chart1.Location = new System.Drawing.Point(268, 12);
             this.chart1.Name = "chart1";
-            series2.Name = "Series1";
-            this.chart1.Series.Add(series2);
+            series1.Name = "Series1";
+            this.chart1.Series.Add(series1);
             this.chart1.Size = new System.Drawing.Size(614, 469);
             this.chart1.TabIndex = 8;
             this.chart1.Text = "chart1";
@@ -145,22 +143,6 @@
             this.cmbYear.Name = "cmbYear";
             this.cmbYear.Size = new System.Drawing.Size(121, 21);
             this.cmbYear.TabIndex = 10;
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(23, 176);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(49, 13);
-            this.label5.TabIndex = 11;
-            this.label5.Text = "Scenario";
-            // 
-            // txtScenario
-            // 
-            this.txtScenario.Location = new System.Drawing.Point(75, 173);
-            this.txtScenario.Name = "txtScenario";
-            this.txtScenario.Size = new System.Drawing.Size(121, 20);
-            this.txtScenario.TabIndex = 12;
             // 
             // lblerr
             // 
@@ -238,8 +220,6 @@
             this.Controls.Add(this.label6);
             this.Controls.Add(this.cmbThana);
             this.Controls.Add(this.lblerr);
-            this.Controls.Add(this.txtScenario);
-            this.Controls.Add(this.label5);
             this.Controls.Add(this.cmbYear);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.chart1);
@@ -270,8 +250,6 @@
         private System.Windows.Forms.DataVisualization.Charting.Chart chart1;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.ComboBox cmbYear;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.TextBox txtScenario;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
         private System.Windows.Forms.Label lblerr;
         private System.Windows.Forms.Label label6;
